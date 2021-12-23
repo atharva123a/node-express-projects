@@ -1,4 +1,7 @@
 const { readFile, writeFile } = require('fs').promises
+
+// util allows us to use promisify but instead we simpy added the 
+// promises method that allows us to do the same exact thing!
 // const util = require('util')
 // const readFilePromise = util.promisify(readFile)
 // const writeFilePromise = util.promisify(writeFile)
@@ -20,6 +23,7 @@ const start = async () => {
 
 start()
 
+// this was previously using promises!
 // const getText = (path) => {
 //   return new Promise((resolve, reject) => {
 //     readFile(path, 'utf8', (err, data) => {

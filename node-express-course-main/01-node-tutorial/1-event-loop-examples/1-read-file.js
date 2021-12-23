@@ -1,3 +1,4 @@
+// allows for async reading of files!
 const { readFile, writeFile } = require('fs')
 
 console.log('started a first task')
@@ -10,4 +11,6 @@ readFile('./content/first.txt', 'utf8', (err, result) => {
   console.log(result)
   console.log('completed first task')
 })
+
+// this code will be printed first since it is non-blocking!
 console.log('starting next task')

@@ -1,6 +1,9 @@
 const http = require('http')
 const { readFileSync } = require('fs')
-
+/* this becomes very combursome after a period of time
+because we have to handle all such requests that take a lot of time
+that's the reason we make use of express
+ */
 // get all files
 const homePage = readFileSync('./navbar-app/index.html')
 const homeStyles = readFileSync('./navbar-app/styles.css')

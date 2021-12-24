@@ -1,26 +1,16 @@
 // handle routes in this case:
 
-const { Router } = require('express')
 const express = require('express')
+const router = express.Router()
 
-const route = express.Router()
+const { getAllTasks , 
+    addTasks,
+    getTask,
+    updateTask,
+    deleteTask } = require('../controller/tasks')
 
-route.get('/',(req, res)=>{
-    res.status(200).json({"success" : true,
-    "data" : 'no data curretly!'
-})
-})
+router.route('/').get(getAllTasks).post(addTasks)
+router.route('/:id').get(getTask).patch(updateTask).delete(deleteTask)
 
-route.post('/', (req, res)=>{
-    const { name } = req.body;
-    if(name.length < 1){
-        console.log("failed to add task!")
-        return res.status(401).json({succcess : false, msg : "Please Enter some task!"})
-    }
-    else {
-        console.log("here added task!")
-        res.status(200).json({success : true, data : name})
-    }
-})
 
-module.exports = route;
+module.exports = router

@@ -2,6 +2,7 @@ const express = require('express')
 const connectDB = require('./db/connect')
 
 const notFound = require('./middleware/not-found')
+const errorHandleMiddleWare = require('./middleware/error-handler')
 
 const app = express()
 
@@ -35,7 +36,8 @@ or line by line
 */
 app.use('/api/v1/tasks', tasks)
 // this works for all other urls and is placed at the bottom intentionally!
-app.use(express.json())
+app.use(notFound)
+app.use(errorHandleMiddleWare)
 
 // makes sure we only run the server after connecting to db:
 start()

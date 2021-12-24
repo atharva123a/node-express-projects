@@ -10,6 +10,7 @@ const getAllTasks = async (req, res)=>{
     //   console.log(data)
       res.status(200).json({tasks});
   } catch (error) {
+    //   500 is a generic error!
       res.status(500).json({msg : error})
     }
 }
@@ -73,5 +74,5 @@ module.exports = { getAllTasks ,
     addTasks,
     getTask,
     updateTask,
-    deleteTask
+    deleteTask,
 }

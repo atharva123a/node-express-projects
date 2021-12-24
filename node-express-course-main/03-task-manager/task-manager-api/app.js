@@ -6,7 +6,7 @@ const errorHandleMiddleWare = require('./middleware/error-handler')
 
 const app = express()
 
-const port = 3000;
+const port = process.ENV.port || 3000;
 // keeping our database access key a secret!
 require('dotenv').config()
 

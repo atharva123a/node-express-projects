@@ -14,7 +14,7 @@ const getProductsStatic = async(req, res)=>{
 
 const getProducts = async(req, res)=>{
     // this allows to get rid of query params that do not exist!
-    const { featured, name, company, sort, fields, numeric} = req.query
+    const { featured, name, company, sort, fields, numericFilters} = req.query
     const queryObj = {}
     if(featured){
         queryObj.featured = featured === 'true'? true : false
@@ -26,6 +26,34 @@ const getProducts = async(req, res)=>{
     if(company){
         queryObj.company = company
     }
+    if(numericFilters){
+        const operatorMap = {
+            // maps the operator that user enters to the corresponding
+        // operators in mongoose for filtering data:
+            '>' : '$gt',
+            ">=" : '$gte',
+            '=' : '$eq',
+            '<=' : '$lte',
+            "<"  : '$lt'
+        }
+        // regEx to throw us anything that matches our pattern:
+        const regEx = /\b(>|<|<=|>=|=)\b/g
+        // replace it with mongoose query syntax:
+        let filters = numericFilters.replace(regEx, (match)=> `-${operatorMap[match]}-`)
+        
+        // we will only apply filter for rating and price:
+        const options = ['rating', 'price']
+
+        filters = filters.split(',').forEach((item)=>{
+            const [field, operator, value] = item.split('-');
+            if(options.includes(field)){
+                // the square braces around operator makes sure it
+                // is using the var opearator and not the "string" operator!
+                queryObj[field] = { [operator] : Number(value) }
+            }
+        })
+    }
+    // console.log(queryObj)
 
     let result = Product.find(queryObj)
 
@@ -44,7 +72,6 @@ const getProducts = async(req, res)=>{
         const fieldItems = fields.split(',').join(' ')
         result = result.select(fieldItems)
     }
-    console.log(req.query)
     let limit = 7; // our default limit!
 
     if(req.query.limit){
@@ -53,6 +80,8 @@ const getProducts = async(req, res)=>{
     }
     
     let pages = 1;
+
+    
 
     if(req.query.page){
         pages = Number(req.query.page)

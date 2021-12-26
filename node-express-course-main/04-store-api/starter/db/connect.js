@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 
-const connectDB = (url) => {
-  return mongoose.connect(url, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
+// in order to prevent error messages:
+const connectDb = async(url)=>{
+  await mongoose.connect(url, {
+    useNewUrlParser : true,
+    useCreateIndex : true,
+    useFindAndModify : false,
+    useUnifiedTopology : true
   })
 }
 
-module.exports = connectDB
+module.exports = connectDb

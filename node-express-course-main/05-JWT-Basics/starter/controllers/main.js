@@ -7,7 +7,7 @@ const CustomAPIError= require("../errors/custom-error")
 
 const jwt = require('jsonwebtoken')
 
-
+// const authMiddleWare = require('../middleware/auth')
 
 const loginUser = async(req, res)=>{
 
@@ -30,24 +30,13 @@ const loginUser = async(req, res)=>{
 }
 
 const dashBoard = async(req, res) =>{
-    
-    const authHeader = req.headers.authorization;
-    
-    if(!authHeader || authHeader.startsWith('Bearer') === false){
-        throw new CustomAPIError(`No token provided!`, 401)
-    }
-    const token = authHeader.split(' ')[1]
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decoded)
-        const secret = Math.floor(Math.random() * 100)
-        res.status(200).json({
-            msg :  `Welcome, ${decoded.username}`,
-            "secret" : `This is your secret token : ${secret}`
-        })
-    } catch (error) {
-        throw new CustomAPIError("Invalid Token", 401)
-    }
+    // we have successfully refactored our code:
+    const { username } = req.headers.userInfo
+    const secret = Math.ceil(Math.random() * 100) // 1 to 100
+    res.status(200).json({
+        msg :  `Welcome back, ${username}`,
+        "secret" : `Your secret token is : ${secret}`
+    })
 }
 
 module.exports = {loginUser, dashBoard}

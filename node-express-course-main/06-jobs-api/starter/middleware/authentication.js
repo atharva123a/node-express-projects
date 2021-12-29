@@ -12,13 +12,13 @@ const User = require("../models/User");
 // this is imp so that the user tryping to modify jobs is doing so for his own job and not for anyone else's jobs
 const authMiddleWare = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-
+  console.log(authHeader);
   if (!authHeader || !authHeader.startsWith("Bearer")) {
     throw new UnauthenticatedError("Authorization Failed");
   }
   const token = authHeader.split(" ")[1];
   try {
-    //   payload recieves data when jwt verifies the token
+    // authenticates user"
     const payload = await jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = { userId: payload.userId, name: payload.name };

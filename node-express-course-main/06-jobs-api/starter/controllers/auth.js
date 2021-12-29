@@ -4,6 +4,8 @@ const User = require("../models/User");
 
 const { StatusCodes } = require("http-status-codes");
 
+const { BadRequestError, UnauthenticatedError } = require("../errors");
+
 const registerUser = async (req, res) => {
   const user = await User.create({ ...req.body });
   const token = user.createJWT();
@@ -11,7 +13,6 @@ const registerUser = async (req, res) => {
 };
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) {
     throw new BadRequestError("Please enter email and password");
   }
@@ -28,7 +29,6 @@ const loginUser = async (req, res) => {
   }
 
   const token = user.createJWT();
-  console.log(token);
   res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
 };
 

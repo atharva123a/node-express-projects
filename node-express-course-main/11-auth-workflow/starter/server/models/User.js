@@ -1,46 +1,66 @@
-const mongoose = require('mongoose');
-const validator = require('validator');
-const bcrypt = require('bcryptjs');
+const mongoose = require("mongoose");
+
+const bycrpt = require("bcryptjs");
+
+const validator = require("validator");
+
+const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please provide name'],
+    required: [true, "Please provide name"],
     minlength: 3,
-    maxlength: 50,
+    maxlength: 30,
   },
   email: {
     type: String,
-    unique: true,
-    required: [true, 'Please provide email'],
+    required: [true, "Please provide email"],
     validate: {
       validator: validator.isEmail,
-      message: 'Please provide valid email',
+      message: "Please provide a valid email!",
     },
+    unique: [true],
   },
   password: {
     type: String,
-    required: [true, 'Please provide password'],
-    minlength: 6,
+    required: [true, "Please provide password"],
   },
   role: {
     type: String,
-    enum: ['admin', 'user'],
-    default: 'user',
+    enum: ["admin", "user"],
+    default: "user",
+  },
+  verificationToken: {
+    type: String,
+  },
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verified: {
+    type: Date,
+  },
+  passwordToken: {
+    type: String,
+  },
+  passwordTokenExpirationDate: {
+    type: Date,
   },
 });
 
-UserSchema.pre('save', async function () {
-  // console.log(this.modifiedPaths());
-  // console.log(this.isModified('name'));
-  if (!this.isModified('password')) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+UserSchema.pre("save", async function (req, res, next) {
+  // prevents the save hook to be called when updating only user:
+  if (!this.isModified("password")) return;
+  const salt = await bycrpt.genSalt(10);
+  this.password = await bycrpt.hash(this.password, salt);
+  next();
 });
 
-UserSchema.methods.comparePassword = async function (canditatePassword) {
-  const isMatch = await bcrypt.compare(canditatePassword, this.password);
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+  // the method is asynchronous:
+  const isMatch = await bycrpt.compare(candidatePassword, this.password);
   return isMatch;
 };
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

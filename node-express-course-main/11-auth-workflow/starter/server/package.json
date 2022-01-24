@@ -1,11 +1,10 @@
 {
-  "name": "10-e-commerce-api",
+  "name": "06-jobs-api",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.8",
     "morgan": "^1.10.0",
+    "nodemailer": "^6.7.2",
     "validator": "^13.6.0",
     "xss-clean": "^0.1.1"
   },
@@ -33,5 +33,6 @@
   },
   "engines": {
     "node": "14.x"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

@@ -1,9 +1,9 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const {
   authenticateUser,
-  authorizePermissions,
-} = require('../middleware/authentication');
+  authenticatePermission,
+} = require("../middleware/authentication");
 
 const {
   getAllOrders,
@@ -11,17 +11,15 @@ const {
   getCurrentUserOrders,
   createOrder,
   updateOrder,
-} = require('../controllers/orderController');
+} = require("../controllers/orderController");
 
 router
-  .route('/')
-  .post(authenticateUser, createOrder)
-  .get(authenticateUser, authorizePermissions('admin'), getAllOrders);
-
-router.route('/showAllMyOrders').get(authenticateUser, getCurrentUserOrders);
-
+  .route("/")
+  .get(authenticateUser, authenticatePermission("admin"), getAllOrders)
+  .post(authenticateUser, createOrder);
+router.route("/showAllMyOrders").get(authenticateUser, getCurrentUserOrders);
 router
-  .route('/:id')
+  .route("/:id")
   .get(authenticateUser, getSingleOrder)
   .patch(authenticateUser, updateOrder);
 
